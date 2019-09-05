@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, View, AsyncStorage } from 'react-native';
+import {View, Button} from 'react-native';
 export default class SignInScreen extends React.Component {
   static navigationOptions = {
     title: 'Please sign in',
@@ -7,7 +7,7 @@ export default class SignInScreen extends React.Component {
 
   render() {
     return (
-      <View>
+      <View style={{marginTop:300}}>
         <Button title="Sign in!" onPress={this._signInAsync} />
       </View>
     );

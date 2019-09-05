@@ -24,10 +24,9 @@ export default class AuthLoadingScreen extends React.Component {
   // Render any loading content that you like here
   render() {
     return (
-      <View>
+      <View style={{marginTop:300}}>
         <ActivityIndicator />
         <StatusBar barStyle="default" />
-        <Text> Hello World</Text>
       </View>
     );
   }
