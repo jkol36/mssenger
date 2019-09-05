@@ -1,5 +1,4 @@
 
-
 import React, { Fragment, Component } from 'react';
 import {
   SafeAreaView,
@@ -22,7 +21,7 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-export default class LoginScreen extends Component {
+export default class App extends Component {
   state = {
     phone: '',
     email: '',
@@ -45,6 +44,24 @@ export default class LoginScreen extends Component {
         })
       }
     })
+    AsyncStorage
+    .getItem('email')
+    .then(val => {
+      if(val) {
+        this.setState({
+          email: val
+        })
+      }
+    })
+    AsyncStorage
+    .getItem('userName')
+    .then(val => {
+      if(val) {
+        this.setState({
+          name: val
+        })
+      }
+    })
   }
 
   submitForm = async () => {
@@ -63,6 +80,8 @@ export default class LoginScreen extends Component {
     else {
       Alert.alert('success', "Should save user data")
       await AsyncStorage.setItem('userPhone', this.state.phone)
+      await AsyncStorage.setItem('userName', this.state.name)
+      await AsyncStorage.setItem('email', this.state.email)
       //save user data
     }
   }
