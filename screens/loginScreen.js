@@ -12,6 +12,7 @@ import {
   Alert,
   AsyncStorage
 } from 'react-native';
+import { createAppContainer, createStackNavigator, StackActions, NavigationActions } from 'react-navigation'; // Version can be specified in package.json
 
 import {
   Header,
@@ -21,7 +22,17 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-export default class App extends Component {
+import User from '../User';
+import firebase from 'firebase';
+
+export default class LoginScreen extends Component {
+  static navigationOptions = {
+    header:null
+  }
+  constructor(props) {
+    super(props)
+    console.log(props)
+  }
   state = {
     phone: '',
     email: '',
@@ -34,35 +45,7 @@ export default class App extends Component {
     })
   }
 
-  componentWillMount() {
-    AsyncStorage
-    .getItem('userPhone')
-    .then(val => {
-      if(val) {
-        this.setState({
-          phone:val
-        })
-      }
-    })
-    AsyncStorage
-    .getItem('email')
-    .then(val => {
-      if(val) {
-        this.setState({
-          email: val
-        })
-      }
-    })
-    AsyncStorage
-    .getItem('userName')
-    .then(val => {
-      if(val) {
-        this.setState({
-          name: val
-        })
-      }
-    })
-  }
+  
 
   submitForm = async () => {
     if(this.state.phone.length < 10) {
@@ -78,10 +61,23 @@ export default class App extends Component {
       Alert.alert('Error', 'Wrong Email')
     }
     else {
-      Alert.alert('success', "Should save user data")
+      Alert.alert('success', "You are now logged in!")
       await AsyncStorage.setItem('userPhone', this.state.phone)
       await AsyncStorage.setItem('userName', this.state.name)
       await AsyncStorage.setItem('email', this.state.email)
+      User.phone = this.state.phone;
+      firebase.database().ref(`users/${User.phone}`).set({
+        phone:this.state.phone,
+        userName:this.state.name,
+        email:this.state.email
+      })
+      this.props.navigation.navigate('App');
+      // this.props.navigation.dispatch(StackActions.reset({
+      //         index: 0,
+      //         actions: [
+      //           NavigationActions.navigate({ routeName: 'Home' })
+      //         ],
+      //       }))
       //save user data
     }
   }
